@@ -6,8 +6,14 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { LinksFunction } from "@remix-run/node";
+import { config as fontAwesomeConfig } from "@fortawesome/fontawesome-svg-core";
+import fontAwesomeStyles from "@fortawesome/fontawesome-svg-core/styles.css";
+fontAwesomeConfig.autoAddCss = false;
 
 import "./tailwind.css";
+import Header from "./components/Header";
+import { AppSidebar } from "./components/Sidebar";
+import { SidebarProvider } from "./components/ui/sidebar";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -19,6 +25,10 @@ export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
+  },
+  {
+    rel: "stylesheet",
+    href: fontAwesomeStyles,
   },
 ];
 
@@ -32,7 +42,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <SidebarProvider>
+          <Header />
+          <div className="flex">
+            <AppSidebar /> {/* Integrate the Sidebar here */}
+            <main className="flex-1 p-6 mt-16">{children}</main>
+          </div>
+        </SidebarProvider>
         <ScrollRestoration />
         <Scripts />
       </body>
